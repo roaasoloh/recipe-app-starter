@@ -1,44 +1,48 @@
 # Recipe App Starter
 
-**Starter repository for Assignment 6** *COSC 498VI – Special Topics in Computer Science* *Spring 2026 | Dr. Roaa Soloh*
+**Starter repository for Assignment 6**  
+**COSC 498VI – Special Topics in Computer Science**  
+**Spring 2026**  
+**Dr. Roaa Soloh**
 
 ---
 
 ## Overview
 
-This project is the starter version of the Recipe App that you will extend in Assignment 6. 
+This project is the starter version of the Recipe App that you will extend in Assignment 6.
 
-The application already includes the core structure from the previous work, such as:
-* React + TypeScript project organization
-* Supabase integration
-* Authentication-aware behavior
-* Category-based recipe handling
-* Favorites support
-* Public recipe dashboard behavior
+The application already includes the core structure from the previous work, including:
+
+- React + TypeScript project organization
+- Supabase integration
+- authentication-aware behavior
+- category-based recipe handling
+- favorites support
+- public recipe dashboard behavior
 
 In Assignment 6, you will continue from this starter and add new functionality related to **Supabase Storage**.
 
 ---
 
-## ⚠️ Important Rule
+## Starter Repository Purpose
 
-**You must use your own Supabase project.**
+This repository is provided so that all of you begin from the same technical foundation.
 
-You are **not allowed** to use:
-* The instructor’s Supabase project
-* Another student’s database
-* A shared backend created by someone else
-
-> Each student must configure and test the application using their own Supabase project.
+You are not expected to rebuild the full application from zero.  
+Instead, you are expected to continue from this codebase and implement the new required features for Assignment 6.
 
 ---
 
-## Purpose of This Starter Repository
+## Supabase Setup Requirement
 
-This repository is provided so that all students begin from the same technical foundation. 
+For this assignment, each one should connect the project to their own Supabase setup.
 
-* You are not expected to rebuild the whole application from zero. 
-* Instead, you must continue from this codebase and implement the new required features for Assignment 6.
+This means you are expected to:
+
+- create and configure your own Supabase project
+- create the required database objects
+- use your own environment variables
+- test the application using your own backend configuration
 
 ---
 
@@ -46,12 +50,12 @@ This repository is provided so that all students begin from the same technical f
 
 The project is organized as follows:
 
-* `src/components` — Reusable UI components
-* `src/pages` — Page-level views
-* `src/hooks` — Reusable React logic
-* `src/services` — Supabase operations
-* `src/types` — TypeScript types and interfaces
-* `src/lib` — Shared configuration such as the Supabase client
+- `src/components` — reusable UI components
+- `src/pages` — page-level views
+- `src/hooks` — reusable React logic
+- `src/services` — Supabase operations
+- `src/types` — TypeScript types and interfaces
+- `src/lib` — shared configuration such as the Supabase client
 
 ---
 
