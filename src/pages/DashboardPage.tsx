@@ -68,7 +68,12 @@ export default function DashboardPage({ user, onSignOut, onSignInClick }: Dashbo
       <Header user={user} onSignOut={onSignOut} onSignInClick={onSignInClick} />
 
       {categoriesError && <p className="error-msg">Categories error: {categoriesError}</p>}
-      
+      <Summary 
+            totalSystemRecipes={recipes.length}
+            totalCategoryRecipes={totalCategoryRecipes}
+            favoriteCount={favorites.length}
+            isLoggedIn={!!user}
+          />
       {!categoriesLoading && !categoriesError && (
         <>
           <FilterPanel 
@@ -104,12 +109,7 @@ export default function DashboardPage({ user, onSignOut, onSignInClick }: Dashbo
             onToggleFavorite={handleToggleFavorite}
           />
 
-          <Summary 
-            totalSystemRecipes={recipes.length}
-            totalCategoryRecipes={totalCategoryRecipes}
-            favoriteCount={favorites.length}
-            isLoggedIn={!!user}
-          />
+          
         </>
       )}
     </div>
