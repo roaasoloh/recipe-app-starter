@@ -1,9 +1,10 @@
 import { useState } from "react";
 import type { AppUser } from "../types/auth";
-import type { Recipe } from "../types/recipe";
+import type { NewRecipe, Recipe } from "../types/recipe";
 import { useCategories } from "../hooks/useCategories";
 import { useRecipes } from "../hooks/useRecipes";
 import { useFavorites } from "../hooks/useFavorites";
+import { uploadRecipeImage, replaceRecipeImage, removeRecipeImage } from "../services/storageService";
 
 import Header from "../components/Header";
 import FilterPanel from "../components/FilterPanel";
@@ -28,7 +29,7 @@ export default function DashboardPage({ user, onSignOut, onSignInClick }: Dashbo
     addRecipe,
     editRecipe,
     removeRecipe
-  } = useRecipes();
+  } = useRecipes(user?.id);
 
   const {
     favorites,
@@ -38,6 +39,36 @@ export default function DashboardPage({ user, onSignOut, onSignInClick }: Dashbo
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("All");
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
+
+  const handleAddRecipe = async (recipe: NewRecipe, imageFile?: File) => {
+    if (imageFile && user) {
+      try {
+        const imageUrl = await uploadRecipeImage(user.id, imageFile);
+        recipe.image_path = imageUrl;
+      } catch {
+        return false;
+      }
+    }
+    return addRecipe(recipe);
+  };
+
+  const handleEditRecipe = async (recipeId: number, updatedData: Partial<NewRecipe>, imageFile?: File) => {
+    if (imageFile && user) {
+      try {
+        const existing = recipes.find(r => r.id === recipeId);
+        let imageUrl: string;
+        if (existing?.image_path) {
+          imageUrl = await replaceRecipeImage(user.id, existing.image_path, imageFile);
+        } else {
+          imageUrl = await uploadRecipeImage(user.id, imageFile);
+        }
+        updatedData.image_path = imageUrl;
+      } catch {
+        return false;
+      }
+    }
+    return editRecipe(recipeId, updatedData);
+  };
 
   const handleToggleFavorite = async (recipeId: number, isFavorite: boolean) => {
     if (!user) return;
@@ -55,6 +86,10 @@ export default function DashboardPage({ user, onSignOut, onSignInClick }: Dashbo
 
   const handleDelete = async (recipeId: number) => {
     if (window.confirm("Are you sure you want to delete this recipe?")) {
+      const recipe = recipes.find(r => r.id === recipeId);
+      if (recipe?.image_path) {
+        try { await removeRecipeImage(recipe.image_path); } catch { /* best-effort */ }
+      }
       await removeRecipe(recipeId);
     }
   };
@@ -88,8 +123,8 @@ export default function DashboardPage({ user, onSignOut, onSignInClick }: Dashbo
               userId={user.id}
               userEmail={user.email || ""}
               editingRecipe={editingRecipe}
-              onAddRecipe={addRecipe}
-              onEditRecipe={editRecipe}
+              onAddRecipe={handleAddRecipe}
+              onEditRecipe={handleEditRecipe}
               onCancelEdit={() => setEditingRecipe(null)}
               error={recipesError}
               successMessage={successMessage}

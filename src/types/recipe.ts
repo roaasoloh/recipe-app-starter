@@ -5,8 +5,12 @@ export type Recipe = {
     prep_time:number;
     category_id: number;
     user_id:string;
-    owner_email:string;
     created_at?:string;
+    owner_email?: string | null;
+    profiles?: {
+        email: string | null;
+    } | null;
+    image_path?: string | null;
 }
 
 export type NewRecipe = {
@@ -15,12 +19,13 @@ export type NewRecipe = {
     prep_time:number;
     category_id: number;
     user_id:string;
-    owner_email:string;
+    image_path?: string | null;
 }
 
-export type RecipeFormData = {
+export type RecipeFormValues = {
     title:string;
     description: string;
-    prep_time:number | string;
-    category_id: string;
+    prep_time:number;
+    categoryId: string;
+    imageFile?: File | null;
 }

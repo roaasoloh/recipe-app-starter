@@ -3,7 +3,7 @@ import type { NewRecipe, Recipe } from "../types/recipe";
 import { createRecipe, getAllRecipes, updateRecipe, deleteRecipe } from "../services/recipeService";
 
 // Custom hook for loading and managing all recipes
-export function useRecipes() {
+export function useRecipes(userId?: string | null) {
   // Stores all recipes
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
@@ -23,17 +23,24 @@ export function useRecipes() {
       return;
     }
 
-    setRecipes(data as Recipe[] ?? []);
+    setRecipes(data ?? []);
     setLoading(false);
   }
 
   // Reload recipes on mount
   useEffect(() => {
-    loadRecipes();
+    async function fetchRecipes() {
+      await loadRecipes();
+    }
+    fetchRecipes();
   }, []);
 
   // Adds a new recipe
   async function addRecipe(recipe: NewRecipe) {
+    if (!userId) {
+      setError("You must be signed in to add recipes.");
+      return false;
+    }
     clearMessages();
     const { error } = await createRecipe(recipe);
 
@@ -49,8 +56,12 @@ export function useRecipes() {
 
   // Updates an existing recipe
   async function editRecipe(recipeId: number, updatedData: Partial<NewRecipe>) {
+    if (!userId) {
+      setError("You must be signed in to update recipes.");
+      return false;
+    }
     clearMessages();
-    const { error } = await updateRecipe(recipeId, updatedData);
+    const { error } = await updateRecipe(recipeId, updatedData, userId);
 
     if (error) {
       setError(error.message);
@@ -64,8 +75,12 @@ export function useRecipes() {
 
   // Deletes a recipe
   async function removeRecipe(recipeId: number) {
+    if (!userId) {
+      setError("You must be signed in to delete recipes.");
+      return false;
+    }
     clearMessages();
-    const { error } = await deleteRecipe(recipeId);
+    const { error } = await deleteRecipe(recipeId, userId);
 
     if (error) {
       setError(error.message);

@@ -24,6 +24,15 @@ export default function RecipeCard({
   return (
     <div className="recipe-card">
       <div className="recipe-card-badge">{categoryName}</div>
+
+      <div className="recipe-card-image">
+        {recipe.image_path ? (
+          <img src={recipe.image_path} alt={recipe.title} />
+        ) : (
+          <div className="recipe-card-placeholder">No Image</div>
+        )}
+      </div>
+
       <h3 className="recipe-card-title">{recipe.title}</h3>
       <div className="recipe-card-meta">
         <span>By: {recipe.owner_email || recipe.user_id}</span>
